@@ -1,5 +1,6 @@
-from datetime import datetime
+import datetime
 
+import jwt
 from flask import Blueprint, jsonify, request, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -21,15 +22,16 @@ def signup_user():
 
 
 @user_control.route('/login', methods=['POST'])
-def login_user(jwt=None):
-    auth = request.authorization
-    if not auth or not auth.username or not auth.password:
+def login_user():
+    auth = request.get_json()
+    print(auth)
+    if not auth or not auth['username'] or not auth['password']:
         return make_response('could not verify', 401, {'Authentication': 'login required"'})
 
-    user = Users.query.filter_by(name=auth.username).first()
-    if check_password_hash(user.password, auth.password):
+    user = Users.query.filter_by(name=auth['username']).first()
+    if check_password_hash(user.password, auth['password']):
         token = jwt.encode(
-            {'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=45)},
+            {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=45)},
             app.config['SECRET_KEY'], "HS256")
 
         return jsonify({'token': token})
