@@ -22,7 +22,6 @@ def create_post(self, user_id, title, body, created):
 
     user = User.query.filter(User.id == id).first()
 
-
     post = Post()
     post.title = title
     post.body = body

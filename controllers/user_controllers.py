@@ -2,6 +2,7 @@ import datetime
 
 import jwt
 from flask import Blueprint, jsonify, request, make_response
+from sqlalchemy.testing.pickleable import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, app
@@ -37,3 +38,23 @@ def login_user():
         return jsonify({'token': token})
 
     return make_response('could not verify', 401, {'Authentication': '"login required"'})
+
+@user_control.route("/<user_id>", methods=['GET'])
+def get_user(user_id):
+    user = User.query.filter(User.id == id).first()
+    if not user:
+        return "user not found", 400
+    return user
+
+
+@user_control.route("/<user_id>", methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.filter(User.id == id).first()
+
+    if not user:
+        return "user not found", 400
+
+    User.query.filter(User.id == id).delete()
+
+    return "Delete"
+

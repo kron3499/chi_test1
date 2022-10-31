@@ -1,0 +1,8 @@
+args~=0.1.0
+kwargs~=1.0.1
+DateTime~=4.7
+SQLAlchemy~=1.4.42
+Flask~=2.2.2
+alembic~=1.8.1
+PyJWT~=2.6.0
+Werkzeug~=2.2.2
