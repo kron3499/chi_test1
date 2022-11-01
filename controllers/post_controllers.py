@@ -1,5 +1,5 @@
-from flask import Blueprint, request
-from sqlalchemy.testing.pickleable import User
+from flask import Blueprint, request, jsonify
+from sqlalchemy.sql.functions import user
 
 from app import db
 from model.post import Post
@@ -8,28 +8,18 @@ from token_required import token_required
 
 post_control: Blueprint = Blueprint('posts', __name__, url_prefix='/posts')
 
-@post_control.route('/')
-@token_required
-def get_post():
 
-    return 'Hello'
 
 @post_control.route('/', methods=['POST'])
-def create_post(self, user_id, title, body, created):
+@token_required
+def create_post(current_user):
     title = request.json.get("title")
     body = request.json.get("body")
-    user_id = request.json.get("userId")
-
-    user = User.query.filter(User.id == id).first()
-
-    post = Post()
-    post.title = title
-    post.body = body
-    post.created = user_id
+    post = Post(title=title, body=body, user_id=current_user.id)
 
     db.db.session.add(post)
     db.session.commit()
-    return post
+    return jsonify({'post.id': post.id})
 
 
 @post_control.route("/users/<user_id>", methods=['DELETE'])

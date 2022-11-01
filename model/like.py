@@ -1,13 +1,11 @@
-from datetime import datetime
-
 from sqlalchemy import func
 
 from app import db
 
 
-class Post(db.Model):
+class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50))
-    body = db.Column(db.Text)
+    post_id = db.Column(db.Integer)
+    liked = db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, default=func.now())
-    user_id = db.Column(db.Integer)
+    like_user_id = db.Column(db.Integer)

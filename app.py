@@ -19,7 +19,6 @@ migrate = Migrate(app, db)
 
 helpers.register_blueprints(app, 'controllers', [basedir + '/controllers'])
 
-from model.users import Users
 
 if __name__ == '__main__':
     app.run(debug=True)

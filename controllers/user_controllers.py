@@ -2,7 +2,6 @@ import datetime
 
 import jwt
 from flask import Blueprint, jsonify, request, make_response
-from sqlalchemy.testing.pickleable import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, app
@@ -30,6 +29,7 @@ def login_user():
         return make_response('could not verify', 401, {'Authentication': 'login required"'})
 
     user = Users.query.filter_by(name=auth['username']).first()
+    print(auth, auth['password'])
     if check_password_hash(user.password, auth['password']):
         token = jwt.encode(
             {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=45)},
