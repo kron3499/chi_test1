@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from sqlalchemy.sql.functions import user
+from pip._internal.network import auth
+
 
 from app import db
 from model.post import Post
@@ -17,15 +18,15 @@ def create_post(current_user):
     body = request.json.get("body")
     post = Post(title=title, body=body, user_id=current_user.id)
 
-    db.db.session.add(post)
+    db.session.add(post)
     db.session.commit()
     return jsonify({'post.id': post.id})
 
 
 @post_control.route("/users/<user_id>", methods=['DELETE'])
 def delete_post(user_id):
-    user = Users.query.filter(Users.id == id).first()
+    user = Users.query.filter_by(name=auth['username']).first()
 
-    User.query.filter(User.id == id).delete()
+    Users.query.filter(Users.id == id).delete()
 
     return "Delete all posts"
