@@ -16,12 +16,17 @@ def create_like(current_user, post_id):
     post = Post.query.filter(Post.id == post_id).first()
     if not post:
         return "post not found", 400
+    like = Like.query.filter(and_(Like.post_id == post_id, Like.like_user_id == current_user.id)).first()
     if not liked:
-        like = Like.query.filter(and_(Like.post_id == post_id, Like.like_user_id == current_user.id)).delete()
-    else:
+        if like:
+            db.session.delete(like)
+            db.session.commit()
+
+        return "Unliked"
+    elif not like:
         like = Like(post_id=post_id, like_user_id=current_user.id, liked=liked)
 
         db.session.add(like)
         db.session.commit()
 
-        return jsonify({'like.id': like.id})
+    return jsonify({'like.id': like.id})
