@@ -23,10 +23,4 @@ def create_post(current_user):
     return jsonify({'post.id': post.id})
 
 
-@post_control.route("/users/<user_id>", methods=['DELETE'])
-def delete_post(user_id):
-    user = Users.query.filter_by(name=auth['username']).first()
 
-    Users.query.filter(Users.id == id).delete()
-
-    return "Delete all posts"
